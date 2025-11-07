@@ -1,6 +1,6 @@
 import sqlite3
 import functools
-
+from datetime import datetime
 #### decorator to lof SQL queries
 
  def log_queries(func):
@@ -8,14 +8,17 @@ import functools
     def wrapper(*args, **kwargs):
         
         query = args[0] if args else kwargs.get('query', None)
-                
+        
+        
         if query:
-            print(f"[LOG] Executing SQL Query: {query}")
+            current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            print(f"[{current_time}] Executing SQL Query: {query}")
         else:
             print("[LOG] No SQL query provided.")
+        
+       
         return func(*args, **kwargs)
     return wrapper
-
 @log_queries
 def fetch_all_users(query):
     conn = sqlite3.connect('users.db')
